@@ -29,9 +29,12 @@ OUT.mkdir(parents=True, exist_ok=True)
 # Paleta reducida a una única familia: cian (nada de dorado/rojos/morados/rosas).
 # Solo variamos brillo/tono dentro del mismo hue para que cualquier transición
 # de color (animate/interpolate) nunca cruce por verde o amarillo.
+# bg0 está calibrado para calzar EXACTO con el fondo real de GitHub en modo
+# oscuro (#212830, medido directamente de un screenshot real) — así, donde
+# quede un hueco de fondo nativo entre imágenes, es invisible en vez de un salto.
 PALETTE = {
-    "bg0": "#070b0d",
-    "bg1": "#081418",
+    "bg0": "#212830",
+    "bg1": "#1a2028",
     "cyan": "#00f0ff",
     "cyan2": "#0a8f9c",
     "cyan3": "#8ff8ff",

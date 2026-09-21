@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 64" width="1000" height="64" role="img" aria-label="GITHUB.TELEMETRY">
 <defs>
   <filter id="glowS" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="1.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#070b0d"/><stop offset="1" stop-color="#081418"/></linearGradient>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#212830"/><stop offset="1" stop-color="#1a2028"/></linearGradient>
   <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#00f0ff" stroke-opacity=".05"/></pattern>
   <clipPath id="card"><polygon points="0,0 984,0 1000,16 1000,64 16,64 0,48"/></clipPath>
 </defs>
