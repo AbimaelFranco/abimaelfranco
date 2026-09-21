@@ -26,18 +26,19 @@ OUT = Path(os.environ.get("OUT_DIR", HERE / "assets"))
 OUT.mkdir(parents=True, exist_ok=True)
 
 # ───────────────────────── CONFIG ─────────────────────────
-# Paleta reducida a dos familias: cian y dorado (nada de rojos/morados/rosas).
+# Paleta reducida a una única familia: cian (nada de dorado/rojos/morados/rosas).
+# Solo variamos brillo/tono dentro del mismo hue para que cualquier transición
+# de color (animate/interpolate) nunca cruce por verde o amarillo.
 PALETTE = {
     "bg0": "#070b0d",
     "bg1": "#081418",
     "cyan": "#00f0ff",
     "cyan2": "#0a8f9c",
-    "gold": "#fcee0a",
-    "gold2": "#d4af0a",
+    "cyan3": "#8ff8ff",
     "dim": "#56728a",
     "ink": "#e6fbff",
 }
-NEON_CYCLE = ["cyan", "gold", "cyan2", "gold2"]
+NEON_CYCLE = ["cyan", "cyan3", "cyan2"]
 
 MONO = "'JetBrains Mono','Fira Code','SFMono-Regular',Consolas,'Courier New',monospace"
 
@@ -109,6 +110,23 @@ AWARDS = [
     ("Taiwan ICDF Scholarship", "IC Manufacturing & Packaging Program", "2025"),
     ("CONESIEE Congress Volunteer", "Engineering Academic Events", ""),
 ]
+
+# Telemetría de GitHub — snapshot estático (datos reales, actualízalo re-corriendo
+# el script). Sustituye a los widgets externos github-readme-stats / activity-graph,
+# que dependen de una instancia pública de Vercel que se cae con frecuencia.
+PROFILE_STATS = [
+    ("PUBLIC REPOS", "47"),
+    ("TOTAL STARS", "30"),
+    ("FOLLOWERS", "6"),
+    ("MEMBER SINCE", "2021"),
+]
+TOP_LANGS = [
+    ("Python", 84.3),
+    ("CSS", 4.3),
+    ("HTML", 2.4),
+    ("JavaScript", 2.3),
+    ("Cython", 1.9),
+]
 # ──────────────────────────────────────────────────────────
 
 C = PALETTE
@@ -141,13 +159,38 @@ def card_defs(card_id, W, H, cut=26):
 
 def card_frame(W, H, cut=26, col_a=None, col_b=None):
     col_a = col_a or C["cyan"]
-    col_b = col_b or C["gold"]
+    col_b = col_b or C["cyan3"]
     return (
         f'<polygon points="1,1 {W-cut-1},1 {W-1},{cut+1} {W-1},{H-1} {cut+1},{H-1} 1,{H-cut-1}" '
         f'fill="none" stroke="{col_a}" stroke-opacity=".5" stroke-width="1.2"/>'
         f'<path d="M1 {cut+34}V1h{cut+34}" fill="none" stroke="{col_b}" stroke-width="2.5"/>'
         f'<path d="M{W-1} {H-cut-34}V{H-1}H{W-cut-34}" fill="none" stroke="{col_a}" stroke-width="2.5"/>'
     )
+
+
+def section_title_svg(kicker, tag="LOADED"):
+    """Barra de título con el mismo fondo/marco que el resto de cards, para que
+    los encabezados de sección nunca vuelvan al texto plano de GitHub."""
+    W, H = 1000, 64
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="{esc(kicker)}">
+<defs>
+  <filter id="glowS" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="1.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{C["bg0"]}"/><stop offset="1" stop-color="{C["bg1"]}"/></linearGradient>
+  <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="{C["cyan"]}" stroke-opacity=".05"/></pattern>
+  {card_defs("card", W, H, cut=16)}
+</defs>
+<g clip-path="url(#card)">
+  <rect width="{W}" height="{H}" fill="url(#bg)"/>
+  <rect width="{W}" height="{H}" fill="url(#grid)"/>
+  <text x="36" y="{H//2+6}" font-family="{MONO}" font-size="16" letter-spacing="4" fill="{C["cyan"]}" filter="url(#glowS)">// {esc(kicker.upper())}</text>
+  <g font-family="{MONO}" font-size="10.5" letter-spacing="2" fill="{C["cyan3"]}" text-anchor="end">
+    <circle cx="{W-96}" cy="{H//2-3}" r="3"><animate attributeName="opacity" values="1;.2;1" dur="1.4s" repeatCount="indefinite"/></circle>
+    <text x="{W-36}" y="{H//2}">{esc(tag)}</text>
+  </g>
+</g>
+{card_frame(W, H, cut=16)}
+</svg>
+'''
 
 
 # ═══════════════════════════════════════════════════════════
@@ -392,7 +435,7 @@ def particles_svg(icons):
   <g fill="none" stroke-width="1.2">
     <circle cx="{cx}" cy="{cy}" r="122" stroke="{C["cyan"]}" stroke-opacity=".45" stroke-dasharray="46 22 6 22">
       <animateTransform attributeName="transform" type="rotate" from="0 {cx} {cy}" to="360 {cx} {cy}" dur="28s" repeatCount="indefinite"/></circle>
-    <circle cx="{cx}" cy="{cy}" r="134" stroke="{C["gold"]}" stroke-opacity=".4" stroke-dasharray="4 14 60 14">
+    <circle cx="{cx}" cy="{cy}" r="134" stroke="{C["cyan3"]}" stroke-opacity=".4" stroke-dasharray="4 14 60 14">
       <animateTransform attributeName="transform" type="rotate" from="360 {cx} {cy}" to="0 {cx} {cy}" dur="40s" repeatCount="indefinite"/></circle>
     <circle cx="{cx}" cy="{cy}" r="146" stroke="{C["dim"]}" stroke-opacity=".35" stroke-dasharray="1 7"/>
   </g>
@@ -409,7 +452,7 @@ def particles_svg(icons):
   {"".join(rows)}
 
   <text x="36" y="42" font-family="{MONO}" font-size="12" letter-spacing="3" fill="{C["cyan"]}" opacity=".85">// STACK.SCAN</text>
-  <g font-family="{MONO}" font-size="11" letter-spacing="2" fill="{C["gold"]}" text-anchor="end">
+  <g font-family="{MONO}" font-size="11" letter-spacing="2" fill="{C["cyan3"]}" text-anchor="end">
     <circle cx="{W-150}" cy="38" r="3.5"><animate attributeName="opacity" values="1;.15;1" dur="1.4s" repeatCount="indefinite"/></circle>
     <text x="{W-40}" y="42">SYS.ONLINE</text>
   </g>
@@ -479,7 +522,7 @@ def header_svg():
 
     traces = [
         ("M700 60H790L820 90H960", C["cyan"], 0),
-        ("M760 250H850L880 220H960V170", C["gold"], 1.3),
+        ("M760 250H850L880 220H960V170", C["cyan3"], 1.3),
         ("M660 30H730L750 50H940", C["cyan2"], 2.4),
     ]
     tr = ""
@@ -491,7 +534,7 @@ def header_svg():
         )
     nodes = "".join(
         f'<circle cx="{x}" cy="{y}" r="3" fill="{c}" opacity=".7"/>'
-        for x, y, c in [(960, 90, C["cyan"]), (960, 170, C["gold"]), (940, 50, C["cyan2"])]
+        for x, y, c in [(960, 90, C["cyan"]), (960, 170, C["cyan3"]), (940, 50, C["cyan2"])]
     )
 
     return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="Abimael Franco — Electronics Engineer, Data Analyst &amp; BI Specialist">
@@ -500,10 +543,10 @@ def header_svg():
   <filter id="glow" x="-10%" y="-40%" width="120%" height="180%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   <filter id="glowS" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{C["bg0"]}"/><stop offset=".6" stop-color="{C["bg1"]}"/><stop offset="1" stop-color="#141007"/></linearGradient>
-  <linearGradient id="rule" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{C["gold"]}"/><stop offset=".5" stop-color="{C["cyan"]}"/><stop offset="1" stop-color="{C["gold2"]}"/></linearGradient>
+  <linearGradient id="rule" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{C["cyan3"]}"/><stop offset=".5" stop-color="{C["cyan"]}"/><stop offset="1" stop-color="{C["cyan2"]}"/></linearGradient>
   <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="{C["cyan"]}" stroke-opacity=".05"/></pattern>
   <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="#000" opacity=".28"/></pattern>
-  <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{C["gold"]}" stop-opacity="0"/><stop offset=".5" stop-color="{C["gold"]}" stop-opacity=".14"/><stop offset="1" stop-color="{C["gold"]}" stop-opacity="0"/></linearGradient>
+  <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{C["cyan3"]}" stop-opacity="0"/><stop offset=".5" stop-color="{C["cyan3"]}" stop-opacity=".14"/><stop offset="1" stop-color="{C["cyan3"]}" stop-opacity="0"/></linearGradient>
   {card_defs("card", W, H, cut=30)}
   {"".join(clips)}
 </defs>
@@ -513,10 +556,10 @@ def header_svg():
   <rect width="{W}" height="{H}" fill="url(#grid)"/>
   {tr}{nodes}
 
-  <text x="{nx}" y="52" font-family="{MONO}" font-size="12" letter-spacing="3" fill="{C["gold"]}" opacity=".9">&gt; whoami<tspan fill="{C["dim"]}"> --profile --verbose</tspan></text>
+  <text x="{nx}" y="52" font-family="{MONO}" font-size="12" letter-spacing="3" fill="{C["cyan3"]}" opacity=".9">&gt; whoami<tspan fill="{C["dim"]}"> --profile --verbose</tspan></text>
 
   <g font-family="'Arial Black','Impact','Segoe UI',Arial,sans-serif">
-    {glitch_layer(C["gold"], gx_m)}
+    {glitch_layer(C["cyan3"], gx_m)}
     {glitch_layer(C["cyan"], gx_c)}
     <text x="{nx}" y="150" font-size="76" font-weight="800" fill="{C["ink"]}" textLength="800" lengthAdjust="spacingAndGlyphs" filter="url(#glow)">{NAME}</text>
   </g>
@@ -524,7 +567,7 @@ def header_svg():
   <rect x="{nx}" y="172" width="800" height="3" fill="url(#rule)" filter="url(#glowS)"/>
 
   <g font-family="{MONO}">
-    <text x="{nx}" y="{y_line}" font-size="{fs}" fill="{C["gold"]}" font-weight="700">&gt;</text>
+    <text x="{nx}" y="{y_line}" font-size="{fs}" fill="{C["cyan3"]}" font-weight="700">&gt;</text>
     <g filter="url(#glowS)">{"".join(texts)}</g>
     <rect x="{x0}" y="{y_line-fs+2}" width="12" height="{fs}" fill="{C["ink"]}">
       <animate attributeName="x" dur="{num(T)}s" repeatCount="indefinite" keyTimes="{";".join(num(t,4) for t in cursor_kt)}" values="{";".join(num(v) for v in cursor_x)}"/>
@@ -580,7 +623,7 @@ def skills_svg():
     kts = ";".join(num(t, 3) for t in kt)
     spl = "0.2 0.8 0.2 1;0 0 1 1;0.6 0 0.8 0.2"
     poly = (
-        f'<polygon points="{center_pts}" fill="{C["gold"]}" fill-opacity=".2" stroke="{C["gold"]}" stroke-width="2" stroke-linejoin="round" filter="url(#glowS)">'
+        f'<polygon points="{center_pts}" fill="{C["cyan3"]}" fill-opacity=".2" stroke="{C["cyan3"]}" stroke-width="2" stroke-linejoin="round" filter="url(#glowS)">'
         f'<animate attributeName="points" dur="{T}s" repeatCount="indefinite" calcMode="spline" keyTimes="{kts}" keySplines="{spl}" values="{center_pts};{full_pts};{full_pts};{center_pts}"/></polygon>'
     )
     dots = ""
@@ -607,7 +650,7 @@ def skills_svg():
             f'<rect x="{bx}" y="{y-6}" width="{bw}" height="10" fill="{C["cyan"]}" fill-opacity=".07" stroke="{C["cyan"]}" stroke-opacity=".28"/>'
             f'<rect x="{bx}" y="{y-6}" width="0" height="10" fill="url(#bar)" filter="url(#glowS)">'
             f'<animate attributeName="width" dur="{T}s" repeatCount="indefinite" calcMode="spline" keyTimes="{bk}" keySplines="0 0 1 1;0.2 0.8 0.2 1;0 0 1 1;0 0 1 1" values="0;0;{num(w)};{num(w)};0"/></rect>'
-            f'<text x="{bx+bw+12}" y="{y+4}" font-size="12" fill="{C["gold"]}" opacity="0">{v}%'
+            f'<text x="{bx+bw+12}" y="{y+4}" font-size="12" fill="{C["cyan3"]}" opacity="0">{v}%'
             f'<animate attributeName="opacity" dur="{T}s" repeatCount="indefinite" keyTimes="{bk}" values="0;0;1;1;0"/></text>'
             f"</g>"
         )
@@ -617,7 +660,7 @@ def skills_svg():
 <defs>
   <filter id="glowS" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{C["bg0"]}"/><stop offset="1" stop-color="{C["bg1"]}"/></linearGradient>
-  <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{C["cyan"]}"/><stop offset="1" stop-color="{C["gold"]}"/></linearGradient>
+  <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{C["cyan"]}"/><stop offset="1" stop-color="{C["cyan3"]}"/></linearGradient>
   <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="{C["cyan"]}" stroke-opacity=".05"/></pattern>
   <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="#000" opacity=".28"/></pattern>
   {card_defs("card", W, H)}
@@ -626,7 +669,7 @@ def skills_svg():
   <rect width="{W}" height="{H}" fill="url(#bg)"/>
   <rect width="{W}" height="{H}" fill="url(#grid)"/>
   <text x="36" y="42" font-size="12" letter-spacing="3" fill="{C["cyan"]}" opacity=".85">// SKILL.MATRIX</text>
-  <text x="520" y="42" font-size="12" letter-spacing="3" fill="{C["gold"]}" opacity=".9">// TOOLCHAIN.LOAD</text>
+  <text x="520" y="42" font-size="12" letter-spacing="3" fill="{C["cyan3"]}" opacity=".9">// TOOLCHAIN.LOAD</text>
   <line x1="500" y1="34" x2="500" y2="{H-34}" stroke="{C["cyan"]}" stroke-opacity=".22"/>
   {rings}{axes}{poly}{dots}{labels}
   {bars}
@@ -644,14 +687,15 @@ def divider_svg():
     W, H = 1000, 24
     return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="separator" aria-hidden="true">
 <defs>
-  <linearGradient id="l" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{C["gold"]}" stop-opacity="0"/><stop offset=".25" stop-color="{C["gold"]}"/><stop offset=".5" stop-color="{C["cyan"]}"/><stop offset=".75" stop-color="{C["gold2"]}"/><stop offset="1" stop-color="{C["gold2"]}" stop-opacity="0"/></linearGradient>
+  <linearGradient id="l" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{C["cyan3"]}" stop-opacity="0"/><stop offset=".25" stop-color="{C["cyan3"]}"/><stop offset=".5" stop-color="{C["cyan"]}"/><stop offset=".75" stop-color="{C["cyan2"]}"/><stop offset="1" stop-color="{C["cyan2"]}" stop-opacity="0"/></linearGradient>
   <linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
   <filter id="glow" x="-10%" y="-300%" width="120%" height="700%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 </defs>
+<rect width="{W}" height="{H}" fill="{C["bg0"]}"/>
 <rect x="60" y="11" width="{W-120}" height="2" fill="url(#l)" filter="url(#glow)"/>
 <rect x="-160" y="10" width="160" height="4" fill="url(#g)" opacity=".9"><animate attributeName="x" values="-160;{W}" dur="3.6s" repeatCount="indefinite"/></rect>
-<g transform="translate(500 12) rotate(45)"><rect x="-5" y="-5" width="10" height="10" fill="{C["bg0"]}" stroke="{C["gold"]}" stroke-width="1.5"/></g>
-<circle cx="500" cy="12" r="1.8" fill="{C["gold"]}"><animate attributeName="opacity" values="1;.2;1" dur="1.6s" repeatCount="indefinite"/></circle>
+<g transform="translate(500 12) rotate(45)"><rect x="-5" y="-5" width="10" height="10" fill="{C["bg0"]}" stroke="{C["cyan3"]}" stroke-width="1.5"/></g>
+<circle cx="500" cy="12" r="1.8" fill="{C["cyan3"]}"><animate attributeName="opacity" values="1;.2;1" dur="1.6s" repeatCount="indefinite"/></circle>
 </svg>
 '''
 
@@ -678,7 +722,7 @@ def about_svg():
         delay = 0.4 + i * 0.15
         facts += (
             f'<g opacity="0"><animate attributeName="opacity" values="0;1" dur=".5s" begin="{num(delay,2)}s" fill="freeze"/>'
-            f'<rect x="{fx}" y="{y-11}" width="7" height="7" fill="{C["gold"]}"/>'
+            f'<rect x="{fx}" y="{y-11}" width="7" height="7" fill="{C["cyan3"]}"/>'
             f'<text x="{fx+16}" y="{y-3}" font-family="{MONO}" font-size="10.5" letter-spacing="2" fill="{C["cyan"]}">{esc(label)}</text>'
             f'<text x="{fx+16}" y="{y+13}" font-family="{MONO}" font-size="12.5" fill="{C["ink"]}">{esc(value)}</text>'
             f"</g>"
@@ -697,15 +741,15 @@ def about_svg():
   <rect width="{W}" height="{H}" fill="url(#bg)"/>
   <rect width="{W}" height="{H}" fill="url(#grid)"/>
   <text x="36" y="42" font-family="{MONO}" font-size="12" letter-spacing="3" fill="{C["cyan"]}" opacity=".85">// ABOUT.ME</text>
-  <text x="36" y="66" font-family="{MONO}" font-size="12" fill="{C["gold"]}" opacity=".9">&gt; cat bio.md</text>
+  <text x="36" y="66" font-family="{MONO}" font-size="12" fill="{C["cyan3"]}" opacity=".9">&gt; cat bio.md</text>
   <g filter="url(#glowS)">{lines}</g>
 
   <line x1="638" y1="34" x2="638" y2="{H-40}" stroke="{C["cyan"]}" stroke-opacity=".22"/>
-  <text x="668" y="66" font-family="{MONO}" font-size="12" letter-spacing="3" fill="{C["gold"]}" opacity=".9">// QUICK.FACTS</text>
+  <text x="668" y="66" font-family="{MONO}" font-size="12" letter-spacing="3" fill="{C["cyan3"]}" opacity=".9">// QUICK.FACTS</text>
   {facts}
 
   <rect x="36" y="{H-46}" width="{W-72}" height="1" fill="{C["cyan"]}" opacity=".2"/>
-  <text x="36" y="{H-22}" font-family="{MONO}" font-size="12" fill="{C["dim"]}">&gt; <tspan fill="{C["gold"]}">{esc(ABOUT_TAGLINE)}</tspan>
+  <text x="36" y="{H-22}" font-family="{MONO}" font-size="12" fill="{C["dim"]}">&gt; <tspan fill="{C["cyan3"]}">{esc(ABOUT_TAGLINE)}</tspan>
     <animate attributeName="opacity" values="1;1;0;0" keyTimes="0;.5;.5001;1" dur="1s" repeatCount="indefinite"/>
   </text>
 
@@ -733,14 +777,14 @@ def education_svg():
         delay = 0.3 + i * 0.25
         block = (
             f'<g opacity="0"><animate attributeName="opacity" values="0;1" dur=".6s" begin="{num(delay,2)}s" fill="freeze"/>'
-            f'<circle cx="{tx}" cy="{y}" r="7" fill="{C["bg0"]}" stroke="{C["gold"]}" stroke-width="2.5" filter="url(#glowS)"/>'
-            f'<circle cx="{tx}" cy="{y}" r="2.3" fill="{C["gold"]}"/>'
+            f'<circle cx="{tx}" cy="{y}" r="7" fill="{C["bg0"]}" stroke="{C["cyan3"]}" stroke-width="2.5" filter="url(#glowS)"/>'
+            f'<circle cx="{tx}" cy="{y}" r="2.3" fill="{C["cyan3"]}"/>'
             f'<text x="{tx+26}" y="{y-8}" font-family="{MONO}" font-size="14" font-weight="700" fill="{C["ink"]}">{esc(title)}</text>'
             f'<text x="{tx+26}" y="{y+11}" font-family="{MONO}" font-size="11.5" fill="{C["dim"]}">{esc(org)}</text>'
             f'<text x="{tx+26}" y="{y+28}" font-family="{MONO}" font-size="11" fill="{C["cyan"]}">{esc(year)}</text>'
         )
         if note:
-            block += f'<text x="{tx+26}" y="{y+45}" font-family="{MONO}" font-size="10.5" fill="{C["gold"]}">★ {esc(note)}</text>'
+            block += f'<text x="{tx+26}" y="{y+45}" font-family="{MONO}" font-size="10.5" fill="{C["cyan3"]}">★ {esc(note)}</text>'
         block += "</g>"
         nodes += block
 
@@ -754,8 +798,8 @@ def education_svg():
             f'<rect x="{cx0}" y="{y-16}" width="8" height="8" fill="{C["cyan"]}"/>'
             f'<text x="{cx0+18}" y="{y-8}" font-family="{MONO}" font-size="12.5" font-weight="700" fill="{C["ink"]}">{esc(title)}</text>'
             f'<text x="{cx0+18}" y="{y+9}" font-family="{MONO}" font-size="11" fill="{C["dim"]}">{esc(org)}</text>'
-            f'<rect x="{W-100}" y="{y-20}" width="60" height="20" fill="{C["gold"]}" opacity=".12" stroke="{C["gold"]}" stroke-opacity=".5"/>'
-            f'<text x="{W-70}" y="{y-6}" text-anchor="middle" font-family="{MONO}" font-size="11" fill="{C["gold"]}">{esc(year)}</text>'
+            f'<rect x="{W-100}" y="{y-20}" width="60" height="20" fill="{C["cyan3"]}" opacity=".12" stroke="{C["cyan3"]}" stroke-opacity=".5"/>'
+            f'<text x="{W-70}" y="{y-6}" text-anchor="middle" font-family="{MONO}" font-size="11" fill="{C["cyan3"]}">{esc(year)}</text>'
             f"</g>"
         )
 
@@ -772,7 +816,7 @@ def education_svg():
   <rect width="{W}" height="{H}" fill="url(#bg)"/>
   <rect width="{W}" height="{H}" fill="url(#grid)"/>
   <text x="36" y="42" font-family="{MONO}" font-size="12" letter-spacing="3" fill="{C["cyan"]}" opacity=".85">// EDUCATION</text>
-  <text x="536" y="42" font-family="{MONO}" font-size="12" letter-spacing="3" fill="{C["gold"]}" opacity=".9">// CERTIFICATIONS.LOG</text>
+  <text x="536" y="42" font-family="{MONO}" font-size="12" letter-spacing="3" fill="{C["cyan3"]}" opacity=".9">// CERTIFICATIONS.LOG</text>
   <line x1="500" y1="34" x2="500" y2="{H-30}" stroke="{C["cyan"]}" stroke-opacity=".22"/>
   {timeline}
   {nodes}
@@ -812,7 +856,7 @@ def awards_svg():
     cards = ""
     for i, ((title, org, year), cx) in enumerate(zip(AWARDS, centers)):
         delay = i * 0.25
-        col = C["gold"] if i % 2 == 0 else C["cyan"]
+        col = C["cyan3"] if i % 2 == 0 else C["cyan"]
         label = f"{title}" if not year else f"{title}  ·  {year}"
         cards += (
             f'<g opacity="0"><animate attributeName="opacity" values="0;1" dur=".6s" begin="{num(delay,2)}s" fill="freeze"/>'
@@ -848,6 +892,66 @@ def awards_svg():
 
 
 # ═══════════════════════════════════════════════════════════
+#  7b) GITHUB TELEMETRY — stats + lenguajes (datos reales, self-hosted)
+# ═══════════════════════════════════════════════════════════
+def telemetry_svg():
+    W, H = 1000, 300
+
+    sx, sy0, srh = 60, 110, 78
+    stats = ""
+    for i, (label, value) in enumerate(PROFILE_STATS):
+        col, row = i % 2, i // 2
+        x = sx + col * 260
+        y = sy0 + row * srh
+        stats += (
+            f'<text x="{x}" y="{y}" font-family="{MONO}" font-size="30" font-weight="700" fill="{C["ink"]}" filter="url(#glowS)">{esc(value)}</text>'
+            f'<text x="{x}" y="{y+20}" font-family="{MONO}" font-size="10.5" letter-spacing="2" fill="{C["cyan"]}">{esc(label)}</text>'
+        )
+
+    bx, bw, brow0, brh = 560, 340, 100, 34
+    bars = ""
+    for i, (name, pct) in enumerate(TOP_LANGS):
+        y = brow0 + i * brh
+        w = bw * min(pct, 100) / 100
+        delay = i * 0.15
+        bars += (
+            f'<g font-family="{MONO}">'
+            f'<text x="{bx}" y="{y-8}" font-size="12" fill="{C["ink"]}" opacity=".9">{esc(name)}</text>'
+            f'<text x="{bx+bw}" y="{y-8}" text-anchor="end" font-size="11" fill="{C["cyan3"]}">{num(pct,1)}%</text>'
+            f'<rect x="{bx}" y="{y-2}" width="{bw}" height="8" fill="{C["cyan"]}" fill-opacity=".08" stroke="{C["cyan"]}" stroke-opacity=".25"/>'
+            f'<rect x="{bx}" y="{y-2}" width="0" height="8" fill="url(#bar)" filter="url(#glowS)" opacity="0">'
+            f'<animate attributeName="width" values="0;{num(w)}" dur=".8s" begin="{num(delay,2)}s" fill="freeze"/>'
+            f'<animate attributeName="opacity" values="0;1" dur=".3s" begin="{num(delay,2)}s" fill="freeze"/></rect>'
+            f"</g>"
+        )
+
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="GitHub telemetry: public repos, stars, followers and top languages">
+<title>GitHub telemetry</title>
+<defs>
+  <filter id="glowS" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{C["bg0"]}"/><stop offset="1" stop-color="{C["bg1"]}"/></linearGradient>
+  <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{C["cyan"]}"/><stop offset="1" stop-color="{C["cyan3"]}"/></linearGradient>
+  <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="{C["cyan"]}" stroke-opacity=".05"/></pattern>
+  <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="#000" opacity=".28"/></pattern>
+  {card_defs("card", W, H)}
+</defs>
+<g clip-path="url(#card)">
+  <rect width="{W}" height="{H}" fill="url(#bg)"/>
+  <rect width="{W}" height="{H}" fill="url(#grid)"/>
+  <text x="36" y="42" font-family="{MONO}" font-size="12" letter-spacing="3" fill="{C["cyan"]}" opacity=".85">// PROFILE.STATS</text>
+  <text x="536" y="42" font-family="{MONO}" font-size="12" letter-spacing="3" fill="{C["cyan"]}" opacity=".85">// TOP.LANGUAGES</text>
+  <line x1="500" y1="34" x2="500" y2="{H-34}" stroke="{C["cyan"]}" stroke-opacity=".22"/>
+  {stats}
+  {bars}
+  <text x="36" y="{H-22}" font-family="{MONO}" font-size="10" fill="{C["dim"]}">SOURCE: GITHUB API · SNAPSHOT</text>
+  <rect width="{W}" height="{H}" fill="url(#scan)"/>
+</g>
+{card_frame(W, H)}
+</svg>
+'''
+
+
+# ═══════════════════════════════════════════════════════════
 #  8) PROYECTOS — thumbnails animados
 # ═══════════════════════════════════════════════════════════
 def _project_chrome(W, H, title, tag):
@@ -861,7 +965,7 @@ def _project_chrome(W, H, title, tag):
   <rect width="{W}" height="{H}" fill="url(#bg)"/>
   <rect width="{W}" height="{H}" fill="url(#grid)"/>
   <text x="20" y="28" font-family="{MONO}" font-size="11" letter-spacing="2" fill="{C["cyan"]}" opacity=".85">// {esc(tag)}</text>
-  <g font-family="{MONO}" font-size="10" letter-spacing="1.5" fill="{C["gold"]}" text-anchor="end">
+  <g font-family="{MONO}" font-size="10" letter-spacing="1.5" fill="{C["cyan3"]}" text-anchor="end">
     <circle cx="{W-52}" cy="24" r="3"><animate attributeName="opacity" values="1;.2;1" dur="1.3s" repeatCount="indefinite"/></circle>
     <text x="{W-20}" y="28">ACTIVE</text>
   </g>'''
@@ -878,17 +982,17 @@ def robotic_arm_svg():
         f'<g><animateTransform attributeName="transform" type="rotate" values="-18;22;-18" '
         f'keyTimes="0;.5;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1" dur="4.6s" repeatCount="indefinite"/>'
         f'<line x1="0" y1="0" x2="0" y2="-92" stroke="{C["cyan"]}" stroke-width="10" stroke-linecap="round"/>'
-        f'<circle cx="0" cy="0" r="7" fill="{C["gold"]}"/>'
+        f'<circle cx="0" cy="0" r="7" fill="{C["cyan3"]}"/>'
         f'<g transform="translate(0 -92)">'
         f'<animateTransform attributeName="transform" type="rotate" values="24;-34;24" additive="sum" '
         f'keyTimes="0;.5;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1" dur="4.6s" repeatCount="indefinite"/>'
         f'<line x1="0" y1="0" x2="0" y2="-72" stroke="{C["cyan2"]}" stroke-width="8" stroke-linecap="round"/>'
-        f'<circle cx="0" cy="0" r="6" fill="{C["gold"]}"/>'
+        f'<circle cx="0" cy="0" r="6" fill="{C["cyan3"]}"/>'
         f'<g transform="translate(0 -72)">'
         f'<animateTransform attributeName="transform" type="rotate" values="-14;46;-14" additive="sum" '
         f'keyTimes="0;.5;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1" dur="4.6s" repeatCount="indefinite"/>'
-        f'<line x1="0" y1="0" x2="0" y2="-46" stroke="{C["gold"]}" stroke-width="6" stroke-linecap="round"/>'
-        f'<circle cx="0" cy="-46" r="7" fill="{C["gold"]}" filter="url(#glowS)">'
+        f'<line x1="0" y1="0" x2="0" y2="-46" stroke="{C["cyan3"]}" stroke-width="6" stroke-linecap="round"/>'
+        f'<circle cx="0" cy="-46" r="7" fill="{C["cyan3"]}" filter="url(#glowS)">'
         f'<animate attributeName="r" values="7;9;7" dur="1.4s" repeatCount="indefinite"/></circle>'
         f"</g></g></g>"
     )
@@ -916,9 +1020,9 @@ def humidity_svg():
         f'<animate attributeName="y2" values="{cy0+90};{cy0+70};{cy0+90}" dur="5s" repeatCount="indefinite"/></line>'
     )
     svg += (
-        f'<g><circle cx="{cx0+24}" cy="{cy0+22}" r="4" fill="{C["gold"]}">'
+        f'<g><circle cx="{cx0+24}" cy="{cy0+22}" r="4" fill="{C["cyan3"]}">'
         f'<animate attributeName="opacity" values="1;.25;1" dur="1.1s" repeatCount="indefinite"/></circle>'
-        f'<text x="{cx0+34}" y="{cy0+26}" font-family="{MONO}" font-size="10" fill="{C["gold"]}">AHT10 · I2C</text></g>'
+        f'<text x="{cx0+34}" y="{cy0+26}" font-family="{MONO}" font-size="10" fill="{C["cyan3"]}">AHT10 · I2C</text></g>'
     )
     rx, ry = 330, 60
     svg += f'<text x="{rx}" y="{ry}" font-family="{MONO}" font-size="10" letter-spacing="2" fill="{C["dim"]}">TEMP</text>'
@@ -938,7 +1042,7 @@ def humidity_svg():
     svg += (
         f'<g transform="translate({gx} {gy})"><animateTransform attributeName="transform" type="rotate" '
         f'values="-40;40;-40" keyTimes="0;.5;1" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1" dur="6s" additive="sum" repeatCount="indefinite"/>'
-        f'<line x1="0" y1="0" x2="0" y2="-{gr-4}" stroke="{C["gold"]}" stroke-width="2.5"/></g>'
+        f'<line x1="0" y1="0" x2="0" y2="-{gr-4}" stroke="{C["cyan3"]}" stroke-width="2.5"/></g>'
     )
     svg += f'<text x="20" y="{H-16}" font-family="{MONO}" font-size="10.5" fill="{C["dim"]}">Raspberry Pi · Django · PostgreSQL · PCB</text>'
     svg += "</g>"
@@ -970,11 +1074,11 @@ def sign_translator_svg():
         for (x, y) in ((x1, y1), (x2, y2), (x3, y3)):
             delay = dot_i * 0.12
             svg += (
-                f'<circle cx="{x}" cy="{y}" r="3.2" fill="{C["gold"]}" filter="url(#glowS)">'
+                f'<circle cx="{x}" cy="{y}" r="3.2" fill="{C["cyan3"]}" filter="url(#glowS)">'
                 f'<animate attributeName="opacity" values=".35;1;.35" dur="1.6s" begin="{num(delay,2)}s" repeatCount="indefinite"/></circle>'
             )
             dot_i += 1
-    svg += f'<circle cx="{hx}" cy="{hy-8}" r="4" fill="{C["gold"]}" filter="url(#glowS)"/>'
+    svg += f'<circle cx="{hx}" cy="{hy-8}" r="4" fill="{C["cyan3"]}" filter="url(#glowS)"/>'
 
     tx0, ty0 = 300, 70
     svg += f'<text x="{tx0}" y="{ty0}" font-family="{MONO}" font-size="11" fill="{C["dim"]}">&gt; translating sign stream_</text>'
@@ -990,7 +1094,7 @@ def sign_translator_svg():
         )
     svg += letters
     svg += (
-        f'<rect x="{tx0 + len(word)*22 + 4}" y="{ty0+18}" width="10" height="24" fill="{C["gold"]}">'
+        f'<rect x="{tx0 + len(word)*22 + 4}" y="{ty0+18}" width="10" height="24" fill="{C["cyan3"]}">'
         f'<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;.5;.5001;1" dur=".9s" repeatCount="indefinite"/></rect>'
     )
     svg += f'<line x1="{tx0}" y1="{ty0+58}" x2="{W-24}" y2="{ty0+58}" stroke="{C["cyan"]}" stroke-opacity=".25"/>'
@@ -1012,8 +1116,13 @@ if __name__ == "__main__":
     (OUT / "about.svg").write_text(about_svg(), encoding="utf-8")
     (OUT / "education.svg").write_text(education_svg(), encoding="utf-8")
     (OUT / "awards.svg").write_text(awards_svg(), encoding="utf-8")
+    (OUT / "telemetry.svg").write_text(telemetry_svg(), encoding="utf-8")
     (OUT / "project-robotic-arm.svg").write_text(robotic_arm_svg(), encoding="utf-8")
     (OUT / "project-humidity.svg").write_text(humidity_svg(), encoding="utf-8")
     (OUT / "project-sign-translator.svg").write_text(sign_translator_svg(), encoding="utf-8")
+    (OUT / "title-tech.svg").write_text(section_title_svg("TECH.STACK"), encoding="utf-8")
+    (OUT / "title-projects.svg").write_text(section_title_svg("NOTABLE.PROJECTS"), encoding="utf-8")
+    (OUT / "title-telemetry.svg").write_text(section_title_svg("GITHUB.TELEMETRY"), encoding="utf-8")
+    (OUT / "title-contact.svg").write_text(section_title_svg("CONTACT", tag="OPEN"), encoding="utf-8")
     for f in sorted(OUT.glob("*.svg")):
         print(f"{f.name:28s}{f.stat().st_size/1024:8.1f} KB")
