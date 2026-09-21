@@ -76,23 +76,6 @@ HEADER_LINES = [
 ]
 NAME = "ABIMAEL FRANCO"
 
-# About Me — texto corto, en líneas ya cortadas para el card.
-ABOUT_LINES = [
-    "Electronics Engineer with hands-on experience building technology",
-    "solutions across automation, embedded systems and data analysis.",
-    "Comfortable bridging hardware and software — sensors, microcontrollers",
-    "and embedded Linux on one side; Python, SQL and BI dashboards on the other.",
-    "Currently a Data & BI Strategy Specialist at BAC, automating reporting",
-    "pipelines and building dashboards for operational decision-making.",
-]
-QUICK_FACTS = [
-    ("ROLE", "Data & BI Strategy Specialist @ BAC"),
-    ("STUDY", "B.Sc. Electronic Engineering, USAC"),
-    ("ABROAD", "Semiconductor Training — Taiwan ICDF"),
-    ("LANGUAGE", "English — B1+"),
-]
-ABOUT_TAGLINE = "turning technical requirements into working systems_"
-
 # Educación formal y formación adicional.
 FORMAL_EDU = [
     ("B.Sc. Electronic Engineering", "Universidad de San Carlos de Guatemala", "2020 – 2025", "Academic Excellence Award 2020 & 2021"),
@@ -684,86 +667,6 @@ def skills_svg():
 
 
 # ═══════════════════════════════════════════════════════════
-#  4) DIVISOR
-# ═══════════════════════════════════════════════════════════
-def divider_svg():
-    W, H = 1000, 24
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="separator" aria-hidden="true">
-<defs>
-  <linearGradient id="l" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{C["cyan3"]}" stop-opacity="0"/><stop offset=".25" stop-color="{C["cyan3"]}"/><stop offset=".5" stop-color="{C["cyan"]}"/><stop offset=".75" stop-color="{C["cyan2"]}"/><stop offset="1" stop-color="{C["cyan2"]}" stop-opacity="0"/></linearGradient>
-  <linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-  <filter id="glow" x="-10%" y="-300%" width="120%" height="700%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-</defs>
-<rect width="{W}" height="{H}" fill="{C["bg0"]}"/>
-<rect x="60" y="11" width="{W-120}" height="2" fill="url(#l)" filter="url(#glow)"/>
-<rect x="-160" y="10" width="160" height="4" fill="url(#g)" opacity=".9"><animate attributeName="x" values="-160;{W}" dur="3.6s" repeatCount="indefinite"/></rect>
-<g transform="translate(500 12) rotate(45)"><rect x="-5" y="-5" width="10" height="10" fill="{C["bg0"]}" stroke="{C["cyan3"]}" stroke-width="1.5"/></g>
-<circle cx="500" cy="12" r="1.8" fill="{C["cyan3"]}"><animate attributeName="opacity" values="1;.2;1" dur="1.6s" repeatCount="indefinite"/></circle>
-</svg>
-'''
-
-
-# ═══════════════════════════════════════════════════════════
-#  5) ABOUT ME — card estilo terminal
-# ═══════════════════════════════════════════════════════════
-def about_svg():
-    W, H = 1000, 300
-
-    lines = ""
-    for i, line in enumerate(ABOUT_LINES):
-        y = 96 + i * 24
-        delay = i * 0.18
-        lines += (
-            f'<text x="60" y="{y}" font-family="{MONO}" font-size="14.5" fill="{C["ink"]}" opacity="0">{esc(line)}'
-            f'<animate attributeName="opacity" values="0;1" dur=".6s" begin="{num(delay,2)}s" fill="freeze"/></text>'
-        )
-
-    facts = ""
-    fx, fy0, frh = 668, 100, 44
-    for i, (label, value) in enumerate(QUICK_FACTS):
-        y = fy0 + i * frh
-        delay = 0.4 + i * 0.15
-        facts += (
-            f'<g opacity="0"><animate attributeName="opacity" values="0;1" dur=".5s" begin="{num(delay,2)}s" fill="freeze"/>'
-            f'<rect x="{fx}" y="{y-11}" width="7" height="7" fill="{C["cyan3"]}"/>'
-            f'<text x="{fx+16}" y="{y-3}" font-family="{MONO}" font-size="10.5" letter-spacing="2" fill="{C["cyan"]}">{esc(label)}</text>'
-            f'<text x="{fx+16}" y="{y+13}" font-family="{MONO}" font-size="12.5" fill="{C["ink"]}">{esc(value)}</text>'
-            f"</g>"
-        )
-
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="About me: Electronics Engineer and Data &amp; BI Specialist summary">
-<title>About me</title>
-<defs>
-  <filter id="glowS" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{C["bg0"]}"/><stop offset="1" stop-color="{C["bg1"]}"/></linearGradient>
-  <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="{C["cyan"]}" stroke-opacity=".05"/></pattern>
-  <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="#000" opacity=".28"/></pattern>
-  {card_defs("card", W, H)}
-</defs>
-<g clip-path="url(#card)">
-  <rect width="{W}" height="{H}" fill="url(#bg)"/>
-  <rect width="{W}" height="{H}" fill="url(#grid)"/>
-  <text x="36" y="42" font-family="{MONO}" font-size="12" letter-spacing="3" fill="{C["cyan"]}" opacity=".85">// ABOUT.ME</text>
-  <text x="36" y="66" font-family="{MONO}" font-size="12" fill="{C["cyan3"]}" opacity=".9">&gt; cat bio.md</text>
-  <g filter="url(#glowS)">{lines}</g>
-
-  <line x1="638" y1="34" x2="638" y2="{H-40}" stroke="{C["cyan"]}" stroke-opacity=".22"/>
-  <text x="668" y="66" font-family="{MONO}" font-size="12" letter-spacing="3" fill="{C["cyan3"]}" opacity=".9">// QUICK.FACTS</text>
-  {facts}
-
-  <rect x="36" y="{H-46}" width="{W-72}" height="1" fill="{C["cyan"]}" opacity=".2"/>
-  <text x="36" y="{H-22}" font-family="{MONO}" font-size="12" fill="{C["dim"]}">&gt; <tspan fill="{C["cyan3"]}">{esc(ABOUT_TAGLINE)}</tspan>
-    <animate attributeName="opacity" values="1;1;0;0" keyTimes="0;.5;.5001;1" dur="1s" repeatCount="indefinite"/>
-  </text>
-
-  <rect width="{W}" height="{H}" fill="url(#scan)"/>
-</g>
-{card_frame(W, H)}
-</svg>
-'''
-
-
-# ═══════════════════════════════════════════════════════════
 #  6) EDUCATION — timeline + certificaciones
 # ═══════════════════════════════════════════════════════════
 def education_svg():
@@ -1115,8 +1018,6 @@ if __name__ == "__main__":
     (OUT / "tech-particles.svg").write_text(particles_svg(icons), encoding="utf-8")
     (OUT / "header.svg").write_text(header_svg(), encoding="utf-8")
     (OUT / "skills.svg").write_text(skills_svg(), encoding="utf-8")
-    (OUT / "divider.svg").write_text(divider_svg(), encoding="utf-8")
-    (OUT / "about.svg").write_text(about_svg(), encoding="utf-8")
     (OUT / "education.svg").write_text(education_svg(), encoding="utf-8")
     (OUT / "awards.svg").write_text(awards_svg(), encoding="utf-8")
     (OUT / "telemetry.svg").write_text(telemetry_svg(), encoding="utf-8")

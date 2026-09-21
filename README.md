@@ -2,14 +2,28 @@
 
 <img src="./assets/header.svg" alt="Abimael Franco — Electronics Engineer, Data Analyst & BI Specialist" width="100%"/>
 
-🎓 Electronics Engineer &nbsp;·&nbsp; 📊 Data Analyst &amp; BI Specialist &nbsp;·&nbsp; 🔌 Embedded Systems &amp; IoT &nbsp;·&nbsp; ⚙️ Automation Engineering
+![Electronics Engineer](https://img.shields.io/badge/-Electronics%20Engineer-212830?style=for-the-badge&logoColor=00f0ff)
+![Data Analyst & BI Specialist](https://img.shields.io/badge/-Data%20Analyst%20%26%20BI%20Specialist-212830?style=for-the-badge&logoColor=8ff8ff)
+![Embedded Systems & IoT](https://img.shields.io/badge/-Embedded%20Systems%20%26%20IoT-212830?style=for-the-badge&logoColor=00f0ff)
+![Automation Engineering](https://img.shields.io/badge/-Automation%20Engineering-212830?style=for-the-badge&logoColor=8ff8ff)
 
-<a href="https://linkedin.com/in/alexander-sanan"><img src="https://img.shields.io/badge/-LinkedIn-0a0a12?style=for-the-badge&logo=linkedin&logoColor=00f0ff" alt="LinkedIn"/></a>
-<a href="https://github.com/AbimaelFranco"><img src="https://img.shields.io/badge/-GitHub-0a0a12?style=for-the-badge&logo=github&logoColor=8ff8ff" alt="GitHub"/></a>
-<img src="https://komarev.com/ghpvc/?username=AbimaelFranco&style=for-the-badge&color=00f0ff&labelColor=0a0a12&label=VISITORS" alt="Profile views"/>
-<img src="./assets/divider.svg" width="100%" alt=""/>
-<img src="./assets/about.svg" alt="About me: Electronics Engineer and Data & BI Specialist, background in embedded systems, automation and BI dashboards" width="100%"/>
-<img src="./assets/divider.svg" width="100%" alt=""/>
+<a href="https://linkedin.com/in/alexander-sanan"><img src="https://img.shields.io/badge/-LinkedIn-212830?style=for-the-badge&logo=linkedin&logoColor=00f0ff" alt="LinkedIn"/></a>
+<a href="https://github.com/AbimaelFranco"><img src="https://img.shields.io/badge/-GitHub-212830?style=for-the-badge&logo=github&logoColor=8ff8ff" alt="GitHub"/></a>
+<img src="https://komarev.com/ghpvc/?username=AbimaelFranco&style=for-the-badge&color=212830&labelColor=212830&label=VISITORS" alt="Profile views"/>
+
+### 🚀 About Me
+
+**Electronics Engineer** with hands-on experience building technology solutions across automation, embedded systems and data analysis. Comfortable bridging hardware and software — sensors, microcontrollers and embedded Linux on one side; Python, SQL and BI dashboards on the other.
+
+Currently a **Data & BI Strategy Specialist** at BAC, automating reporting pipelines and building dashboards for operational decision-making. Background also includes teaching assistant roles in Programming and Mathematics at USAC, and international training in semiconductor manufacturing with Taiwan ICDF.
+
+|  |  |
+|:--|:--|
+| 🎯 **Role** | Data & BI Strategy Specialist @ BAC |
+| 🎓 **Study** | B.Sc. Electronic Engineering, USAC |
+| 🌏 **Abroad** | Semiconductor Training — Taiwan ICDF |
+| 🗣️ **Language** | English — B1+ |
+
 <img src="./assets/title-tech.svg" alt="Technologies & Tools" width="100%"/>
 <img src="./assets/tech-particles.svg" alt="Animated particles morphing into the logos of Python, Java, .NET, Django, OpenCV, UiPath, MySQL, PostgreSQL, Docker, Raspberry Pi, Unity, Cisco and GitHub" width="100%"/>
 
@@ -18,36 +32,34 @@
 <br/>
 
 ### 👨‍💻 Programming & Frameworks
-![Python](https://img.shields.io/badge/-Python-0a0a12?style=for-the-badge&logo=python&logoColor=00f0ff)
-![C/C++](https://img.shields.io/badge/-C%2FC%2B%2B-0a0a12?style=for-the-badge&logo=cplusplus&logoColor=8ff8ff)
-![Java](https://img.shields.io/badge/-Java-0a0a12?style=for-the-badge&logo=openjdk&logoColor=00f0ff)
-![.NET](https://img.shields.io/badge/-.NET-0a0a12?style=for-the-badge&logo=dotnet&logoColor=8ff8ff)
-![SQL](https://img.shields.io/badge/-SQL-0a0a12?style=for-the-badge&logo=mysql&logoColor=00f0ff)
-![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-0a0a12?style=for-the-badge&logo=postgresql&logoColor=8ff8ff)
-![Django](https://img.shields.io/badge/-Django-0a0a12?style=for-the-badge&logo=django&logoColor=00f0ff)
-![Git](https://img.shields.io/badge/-Git-0a0a12?style=for-the-badge&logo=git&logoColor=8ff8ff)
+![Python](https://img.shields.io/badge/-Python-212830?style=for-the-badge&logo=python&logoColor=00f0ff)
+![C/C++](https://img.shields.io/badge/-C%2FC%2B%2B-212830?style=for-the-badge&logo=cplusplus&logoColor=8ff8ff)
+![Java](https://img.shields.io/badge/-Java-212830?style=for-the-badge&logo=openjdk&logoColor=00f0ff)
+![.NET](https://img.shields.io/badge/-.NET-212830?style=for-the-badge&logo=dotnet&logoColor=8ff8ff)
+![SQL](https://img.shields.io/badge/-SQL-212830?style=for-the-badge&logo=mysql&logoColor=00f0ff)
+![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-212830?style=for-the-badge&logo=postgresql&logoColor=8ff8ff)
+![Django](https://img.shields.io/badge/-Django-212830?style=for-the-badge&logo=django&logoColor=00f0ff)
+![Git](https://img.shields.io/badge/-Git-212830?style=for-the-badge&logo=git&logoColor=8ff8ff)
 
 ### 📊 Data, BI & Automation
-![Excel](https://img.shields.io/badge/-Excel%20(Advanced)-0a0a12?style=for-the-badge&logo=microsoftexcel&logoColor=00f0ff)
-![Power BI](https://img.shields.io/badge/-Power%20BI-0a0a12?style=for-the-badge&logo=powerbi&logoColor=8ff8ff)
-![UiPath](https://img.shields.io/badge/-UiPath%20(RPA)-0a0a12?style=for-the-badge&logo=uipath&logoColor=00f0ff)
-![Docker](https://img.shields.io/badge/-Docker-0a0a12?style=for-the-badge&logo=docker&logoColor=8ff8ff)
-![AWS](https://img.shields.io/badge/-AWS-0a0a12?style=for-the-badge&logo=amazonaws&logoColor=00f0ff)
-![Linux](https://img.shields.io/badge/-Linux-0a0a12?style=for-the-badge&logo=linux&logoColor=8ff8ff)
+![Excel](https://img.shields.io/badge/-Excel%20(Advanced)-212830?style=for-the-badge&logo=microsoftexcel&logoColor=00f0ff)
+![Power BI](https://img.shields.io/badge/-Power%20BI-212830?style=for-the-badge&logo=powerbi&logoColor=8ff8ff)
+![UiPath](https://img.shields.io/badge/-UiPath%20(RPA)-212830?style=for-the-badge&logo=uipath&logoColor=00f0ff)
+![Docker](https://img.shields.io/badge/-Docker-212830?style=for-the-badge&logo=docker&logoColor=8ff8ff)
+![AWS](https://img.shields.io/badge/-AWS-212830?style=for-the-badge&logo=amazonaws&logoColor=00f0ff)
+![Linux](https://img.shields.io/badge/-Linux-212830?style=for-the-badge&logo=linux&logoColor=8ff8ff)
 
 ### 🔌 Embedded, Simulation & Design
-![MATLAB](https://img.shields.io/badge/-MATLAB-0a0a12?style=for-the-badge&logo=mathworks&logoColor=00f0ff)
-![Simulink](https://img.shields.io/badge/-Simulink-0a0a12?style=for-the-badge&logo=mathworks&logoColor=8ff8ff)
-![OpenCV](https://img.shields.io/badge/-OpenCV-0a0a12?style=for-the-badge&logo=opencv&logoColor=00f0ff)
-![Raspberry Pi](https://img.shields.io/badge/-Raspberry%20Pi-0a0a12?style=for-the-badge&logo=raspberrypi&logoColor=8ff8ff)
-![Fusion 360](https://img.shields.io/badge/-Fusion%20360-0a0a12?style=for-the-badge&logo=autodesk&logoColor=00f0ff)
-![3ds Max](https://img.shields.io/badge/-3ds%20Max-0a0a12?style=for-the-badge&logo=autodesk&logoColor=8ff8ff)
-![Cisco CCNA](https://img.shields.io/badge/-Cisco%20CCNA-0a0a12?style=for-the-badge&logo=cisco&logoColor=00f0ff)
+![MATLAB](https://img.shields.io/badge/-MATLAB-212830?style=for-the-badge&logo=mathworks&logoColor=00f0ff)
+![Simulink](https://img.shields.io/badge/-Simulink-212830?style=for-the-badge&logo=mathworks&logoColor=8ff8ff)
+![OpenCV](https://img.shields.io/badge/-OpenCV-212830?style=for-the-badge&logo=opencv&logoColor=00f0ff)
+![Raspberry Pi](https://img.shields.io/badge/-Raspberry%20Pi-212830?style=for-the-badge&logo=raspberrypi&logoColor=8ff8ff)
+![Fusion 360](https://img.shields.io/badge/-Fusion%20360-212830?style=for-the-badge&logo=autodesk&logoColor=00f0ff)
+![3ds Max](https://img.shields.io/badge/-3ds%20Max-212830?style=for-the-badge&logo=autodesk&logoColor=8ff8ff)
+![Cisco CCNA](https://img.shields.io/badge/-Cisco%20CCNA-212830?style=for-the-badge&logo=cisco&logoColor=00f0ff)
 
 <div align="center">
-<img src="./assets/divider.svg" width="100%" alt=""/>
 <img src="./assets/skills.svg" alt="Radar chart of skill domains and proficiency bars for my main tools" width="100%"/>
-<img src="./assets/divider.svg" width="100%" alt=""/>
 <img src="./assets/title-projects.svg" alt="Notable Projects" width="100%"/>
 
 </div>
@@ -95,28 +107,22 @@
 </table>
 
 <div align="center">
-<img src="./assets/divider.svg" width="100%" alt=""/>
 <img src="./assets/title-telemetry.svg" alt="GitHub Telemetry" width="100%"/>
 <img src="./assets/telemetry.svg" alt="GitHub telemetry: public repos, stars, followers and top languages" width="100%"/>
 
-<img src="https://streak-stats.demolab.com?user=AbimaelFranco&hide_longest_streak=true&background=07070D&border=00F0FF&stroke=00F0FF55&ring=00F0FF&fire=8FF8FF&currStreakNum=E6FBFF&sideNums=E6FBFF&currStreakLabel=00F0FF&sideLabels=00F0FF&dates=56628A&border_radius=4" alt="GitHub streak (current streak & total contributions)" width="70%"/>
+<img src="https://streak-stats.demolab.com?user=AbimaelFranco&hide_longest_streak=true&background=212830&border=00F0FF&stroke=00F0FF55&ring=00F0FF&fire=8FF8FF&currStreakNum=E6FBFF&sideNums=E6FBFF&currStreakLabel=00F0FF&sideLabels=00F0FF&dates=56728A&border_radius=4" alt="GitHub streak (current streak & total contributions)" width="70%"/>
 
 <img src="https://raw.githubusercontent.com/AbimaelFranco/AbimaelFranco/output/github-snake-cyber.svg" alt="Snake eating my contributions" width="100%"/>
 
-<img src="./assets/divider.svg" width="100%" alt=""/>
 <img src="./assets/education.svg" alt="Education timeline and additional certifications" width="100%"/>
-<img src="./assets/divider.svg" width="100%" alt=""/>
 <img src="./assets/awards.svg" alt="Awards and recognitions" width="100%"/>
-<img src="./assets/divider.svg" width="100%" alt=""/>
 <img src="./assets/title-contact.svg" alt="Contact Me" width="100%"/>
 
-<a href="https://linkedin.com/in/alexander-sanan"><img src="https://img.shields.io/badge/-LinkedIn-0a0a12?style=for-the-badge&logo=linkedin&logoColor=00f0ff" alt="LinkedIn"/></a>
-<a href="https://github.com/AbimaelFranco"><img src="https://img.shields.io/badge/-GitHub-0a0a12?style=for-the-badge&logo=github&logoColor=8ff8ff" alt="GitHub"/></a>
+<a href="https://linkedin.com/in/alexander-sanan"><img src="https://img.shields.io/badge/-LinkedIn-212830?style=for-the-badge&logo=linkedin&logoColor=00f0ff" alt="LinkedIn"/></a>
+<a href="https://github.com/AbimaelFranco"><img src="https://img.shields.io/badge/-GitHub-212830?style=for-the-badge&logo=github&logoColor=8ff8ff" alt="GitHub"/></a>
 
 <br/>
 
 > "Striving to build tech that empowers people and improves lives."
-
-<img src="./assets/divider.svg" width="100%" alt=""/>
 
 </div>
