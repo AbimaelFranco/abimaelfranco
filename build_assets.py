@@ -24,7 +24,7 @@ from scipy.ndimage import binary_erosion
 from scipy.optimize import linear_sum_assignment
 
 HERE = Path(__file__).parent
-OUT = Path(os.environ.get("OUT_DIR", HERE.parent / "assets"))
+OUT = Path(os.environ.get("OUT_DIR", HERE / "assets"))
 OUT.mkdir(parents=True, exist_ok=True)
 
 # ───────────────────────── CONFIG ─────────────────────────
