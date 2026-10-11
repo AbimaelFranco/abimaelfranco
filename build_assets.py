@@ -1012,6 +1012,147 @@ def sign_translator_svg():
     return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="Animated real-time sign language translator">{svg}</svg>\n'
 
 
+def wet_scrubber_svg():
+    """Torre de lavado de gases (wet scrubber) supervisada por los nodos ESP32:
+    gas sucio entra por abajo, sube por el lecho empacado mientras el licor
+    rociado cae desde las boquillas, y sale gas limpio por la chimenea."""
+    W, H = 480, 260
+    tx, ty, tw, th = 74, 62, 84, 146          # cuerpo de la torre
+    cx = tx + tw / 2
+    svg = _project_chrome(W, H, "WET SCRUBBER MONITOR", "SCRUBBER.CTRL")
+
+    # Chimenea de salida (gas limpio)
+    svg += f'<rect x="{cx-9}" y="40" width="18" height="{ty-40}" fill="{C["bg1"]}" stroke="{C["cyan"]}" stroke-opacity=".5"/>'
+    # Ducto de entrada (gas sucio) por la izquierda, abajo
+    iy = ty + th - 46
+    svg += f'<rect x="22" y="{iy}" width="{tx-22}" height="16" fill="{C["bg1"]}" stroke="{C["cyan"]}" stroke-opacity=".5"/>'
+    # Torre
+    svg += f'<rect x="{tx}" y="{ty}" width="{tw}" height="{th}" rx="5" fill="{C["bg1"]}" stroke="{C["cyan"]}" stroke-opacity=".6"/>'
+
+    # Sumidero de licor con superficie ondulante
+    sy = ty + th - 18
+    svg += (
+        f'<path fill="{C["cyan"]}" opacity=".2">'
+        f'<animate attributeName="d" dur="2.4s" repeatCount="indefinite" values="'
+        f'M{tx+2} {sy} Q{cx-20} {sy-4} {cx} {sy} T{tx+tw-2} {sy} V{ty+th-2} H{tx+2}Z;'
+        f'M{tx+2} {sy} Q{cx-20} {sy+4} {cx} {sy} T{tx+tw-2} {sy} V{ty+th-2} H{tx+2}Z;'
+        f'M{tx+2} {sy} Q{cx-20} {sy-4} {cx} {sy} T{tx+tw-2} {sy} V{ty+th-2} H{tx+2}Z"/></path>'
+    )
+
+    # Lecho empacado (relleno)
+    by0, by1 = ty + 52, ty + 84
+    svg += f'<rect x="{tx+4}" y="{by0}" width="{tw-8}" height="{by1-by0}" fill="{C["cyan"]}" opacity=".05" stroke="{C["cyan"]}" stroke-opacity=".3" stroke-dasharray="3 3"/>'
+    for i in range(6):
+        x = tx + 8 + i * 12
+        svg += f'<path d="M{x} {by1-4} L{x+9} {by0+4}" stroke="{C["cyan2"]}" stroke-opacity=".7"/>'
+        svg += f'<path d="M{x} {by0+4} L{x+9} {by1-4}" stroke="{C["cyan2"]}" stroke-opacity=".4"/>'
+
+    # Cabezal de rociado + boquillas
+    hy = ty + 18
+    svg += f'<line x1="{tx+6}" y1="{hy}" x2="{tx+tw}" y2="{hy}" stroke="{C["cyan3"]}" stroke-width="2.5"/>'
+    nozzles = [tx + 16, tx + 34, tx + 52, tx + 70]
+    for n in nozzles:
+        svg += f'<path d="M{n-4} {hy+1} L{n+4} {hy+1} L{n} {hy+7}Z" fill="{C["cyan3"]}"/>'
+
+    # Gotas de licor cayendo
+    for i, n in enumerate(nozzles):
+        for j in range(3):
+            d = round(i * 0.17 + j * 0.45, 2)
+            ox = (j - 1) * 4
+            svg += (
+                f'<circle cx="{n+ox}" cy="{hy+8}" r="1.6" fill="{C["cyan3"]}" opacity="0">'
+                f'<animate attributeName="cy" values="{hy+8};{sy}" dur="1.35s" begin="{d}s" repeatCount="indefinite"/>'
+                f'<animate attributeName="opacity" values="0;.9;.9;0" keyTimes="0;.1;.85;1" dur="1.35s" begin="{d}s" repeatCount="indefinite"/></circle>'
+            )
+
+    # Gas sucio: entra por el ducto y asciende por la torre (se "limpia" al subir)
+    for i in range(7):
+        d = round(i * 0.5, 2)
+        x_end = tx + 14 + (i * 11) % (tw - 26)
+        svg += (
+            f'<circle r="2.6" fill="{C["dim"]}" opacity="0">'
+            f'<animateMotion dur="3.5s" begin="{d}s" repeatCount="indefinite" '
+            f'path="M28 {iy+8} L{tx+10} {iy+8} L{x_end} {iy-6} L{x_end} {by0-6}"/>'
+            f'<animate attributeName="opacity" values="0;.9;.9;0" keyTimes="0;.08;.7;1" dur="3.5s" begin="{d}s" repeatCount="indefinite"/>'
+            f'<animate attributeName="r" values="2.6;2.6;1" keyTimes="0;.6;1" dur="3.5s" begin="{d}s" repeatCount="indefinite"/></circle>'
+        )
+    # Gas limpio saliendo por la chimenea
+    for i in range(4):
+        d = round(i * 0.55, 2)
+        svg += (
+            f'<circle cx="{cx + (i % 2) * 4 - 2}" cy="{ty-2}" r="2" fill="{C["cyan"]}" filter="url(#glowS)" opacity="0">'
+            f'<animate attributeName="cy" values="{ty-2};34" dur="2.2s" begin="{d}s" repeatCount="indefinite"/>'
+            f'<animate attributeName="opacity" values="0;1;0" dur="2.2s" begin="{d}s" repeatCount="indefinite"/></circle>'
+        )
+
+    # Lazo de recirculación sumidero → bomba → cabezal
+    px = tx + tw + 20
+    svg += (
+        f'<path d="M{tx+tw} {sy+8} H{px} V{hy} H{tx+tw}" fill="none" stroke="{C["cyan"]}" stroke-width="2" '
+        f'stroke-dasharray="5 5" stroke-opacity=".7"><animate attributeName="stroke-dashoffset" values="0;10" dur=".8s" repeatCount="indefinite"/></path>'
+    )
+    svg += f'<circle cx="{px}" cy="{sy-14}" r="8" fill="{C["bg1"]}" stroke="{C["cyan3"]}" stroke-width="1.5"/>'
+    svg += (
+        f'<g transform="translate({px} {sy-14})"><path d="M-5 0H5M0 -5V5" stroke="{C["cyan3"]}" stroke-width="1.5">'
+        f'<animateTransform attributeName="transform" type="rotate" values="0;360" dur="1s" repeatCount="indefinite"/></path></g>'
+    )
+
+    # Panel derecho: telemetría de los nodos ESP32
+    rx = 236
+    svg += f'<text x="{rx}" y="60" font-family="{MONO}" font-size="10" letter-spacing="2" fill="{C["dim"]}">NODE·A TEMP</text>'
+    svg += "".join(
+        f'<text x="{rx}" y="84" font-family="{MONO}" font-size="20" font-weight="700" fill="{C["ink"]}" filter="url(#glowS)" opacity="0">{t}'
+        f'<animate attributeName="opacity" dur="4.8s" repeatCount="indefinite" keyTimes="{kt}" values="{vals}"/></text>'
+        for t, (kt, vals) in ((tt, window(k, 1.2, 4.8, 4)) for k, tt in enumerate(["31.2°C", "31.8°C", "32.4°C", "31.5°C"]))
+    )
+    svg += f'<text x="{rx+124}" y="60" font-family="{MONO}" font-size="10" letter-spacing="2" fill="{C["dim"]}">NODE·B RH</text>'
+    svg += "".join(
+        f'<text x="{rx+124}" y="84" font-family="{MONO}" font-size="20" font-weight="700" fill="{C["cyan"]}" filter="url(#glowS)" opacity="0">{t}'
+        f'<animate attributeName="opacity" dur="5.2s" repeatCount="indefinite" keyTimes="{kt}" values="{vals}"/></text>'
+        for t, (kt, vals) in ((tt, window(k, 1.3, 5.2, 4)) for k, tt in enumerate(["82% RH", "85% RH", "87% RH", "84% RH"]))
+    )
+
+    # Enlace ESP-NOW nodo A ⇄ nodo B
+    ly = 120
+    svg += f'<rect x="{rx}" y="{ly-11}" width="58" height="22" rx="3" fill="{C["bg1"]}" stroke="{C["cyan"]}" stroke-opacity=".6"/>'
+    svg += f'<text x="{rx+29}" y="{ly+4}" text-anchor="middle" font-family="{MONO}" font-size="10" fill="{C["cyan3"]}">ESP32·A</text>'
+    svg += f'<rect x="{W-82}" y="{ly-11}" width="58" height="22" rx="3" fill="{C["bg1"]}" stroke="{C["cyan"]}" stroke-opacity=".6"/>'
+    svg += f'<text x="{W-53}" y="{ly+4}" text-anchor="middle" font-family="{MONO}" font-size="10" fill="{C["cyan3"]}">ESP32·B</text>'
+    svg += f'<line x1="{rx+62}" y1="{ly}" x2="{W-86}" y2="{ly}" stroke="{C["cyan"]}" stroke-opacity=".3" stroke-dasharray="3 4"/>'
+    svg += f'<text x="{(rx+W-24)/2}" y="{ly-8}" text-anchor="middle" font-family="{MONO}" font-size="9" letter-spacing="1.5" fill="{C["dim"]}">ESP-NOW</text>'
+    svg += (
+        f'<circle cy="{ly}" r="3" fill="{C["cyan3"]}" filter="url(#glowS)">'
+        f'<animate attributeName="cx" values="{rx+64};{W-88};{rx+64}" keyTimes="0;.5;1" calcMode="spline" '
+        f'keySplines="0.4 0 0.2 1;0.4 0 0.2 1" dur="2.6s" repeatCount="indefinite"/></circle>'
+    )
+
+    # Actuadores: ventilador girando + LED de alarma
+    ay = 166
+    fx = rx + 12
+    svg += f'<circle cx="{fx}" cy="{ay}" r="11" fill="none" stroke="{C["cyan"]}" stroke-opacity=".4"/>'
+    svg += (
+        f'<g transform="translate({fx} {ay})"><g fill="{C["cyan"]}" opacity=".85">'
+        + "".join(f'<ellipse cx="0" cy="-5" rx="2.6" ry="5" transform="rotate({a})"/>' for a in (0, 120, 240))
+        + f'<animateTransform attributeName="transform" type="rotate" values="0;360" dur=".7s" repeatCount="indefinite"/></g>'
+        f'<circle r="1.8" fill="{C["cyan3"]}"/></g>'
+    )
+    svg += f'<text x="{fx+20}" y="{ay+4}" font-family="{MONO}" font-size="10" fill="{C["cyan3"]}">FAN ON</text>'
+    lx = rx + 112
+    svg += (
+        f'<circle cx="{lx+6}" cy="{ay}" r="5" fill="{C["cyan3"]}" filter="url(#glowS)">'
+        f'<animate attributeName="opacity" values="1;.15;1" dur=".9s" repeatCount="indefinite"/></circle>'
+    )
+    svg += f'<text x="{lx+18}" y="{ay+4}" font-family="{MONO}" font-size="10" fill="{C["cyan3"]}">ALARM · RH&gt;80%</text>'
+
+    svg += f'<line x1="{rx}" y1="190" x2="{W-24}" y2="190" stroke="{C["cyan"]}" stroke-opacity=".25"/>'
+    svg += f'<text x="{rx}" y="208" font-family="{MONO}" font-size="10.5" fill="{C["dim"]}">MQTT/TLS → worker → PostgreSQL</text>'
+    svg += f'<text x="{rx}" y="224" font-family="{MONO}" font-size="10.5" fill="{C["dim"]}">Django dashboard · end-to-end ack</text>'
+    svg += f'<text x="20" y="{H-16}" font-family="{MONO}" font-size="10.5" fill="{C["dim"]}">ESP32 · ESP-IDF · MQTT · Django · Docker</text>'
+    svg += "</g>"
+    svg += card_frame(W, H, cut=18)
+    return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="Animated wet scrubber monitored by two ESP32 IoT nodes">{svg}</svg>\n'
+
+
 # ═══════════════════════════════════════════════════════════
 if __name__ == "__main__":
     icons = json.loads((HERE / "icons.json").read_text())
@@ -1024,6 +1165,7 @@ if __name__ == "__main__":
     (OUT / "project-robotic-arm.svg").write_text(robotic_arm_svg(), encoding="utf-8")
     (OUT / "project-humidity.svg").write_text(humidity_svg(), encoding="utf-8")
     (OUT / "project-sign-translator.svg").write_text(sign_translator_svg(), encoding="utf-8")
+    (OUT / "project-wet-scrubber.svg").write_text(wet_scrubber_svg(), encoding="utf-8")
     (OUT / "title-tech.svg").write_text(section_title_svg("TECH.STACK"), encoding="utf-8")
     (OUT / "title-projects.svg").write_text(section_title_svg("NOTABLE.PROJECTS"), encoding="utf-8")
     (OUT / "title-telemetry.svg").write_text(section_title_svg("GITHUB.TELEMETRY"), encoding="utf-8")

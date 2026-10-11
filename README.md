@@ -9,8 +9,6 @@
 
 <a href="https://linkedin.com/in/alexander-sanan"><img src="https://img.shields.io/badge/-LinkedIn-212830?style=for-the-badge&logo=linkedin&logoColor=00f0ff" alt="LinkedIn"/></a>
 <a href="https://github.com/AbimaelFranco"><img src="https://img.shields.io/badge/-GitHub-212830?style=for-the-badge&logo=github&logoColor=8ff8ff" alt="GitHub"/></a>
-<img src="https://komarev.com/ghpvc/?username=AbimaelFranco&style=for-the-badge&color=212830&labelColor=212830&label=VISITORS" alt="Profile views"/>
-
 ### 🚀 About Me
 
 **Electronics Engineer** with hands-on experience building technology solutions across automation, embedded systems and data analysis. Comfortable bridging hardware and software — sensors, microcontrollers and embedded Linux on one side; Python, SQL and BI dashboards on the other.
@@ -65,6 +63,19 @@ Currently a **Data & BI Strategy Specialist** at BAC, automating reporting pipel
 </div>
 
 <table>
+  <tr>
+    <td width="45%" valign="top">
+      <a href="https://github.com/AbimaelFranco/iot-engineering-challenge">
+        <img src="./assets/project-wet-scrubber.svg" alt="Animated wet scrubber monitored by two ESP32 IoT nodes" width="100%"/>
+      </a>
+    </td>
+    <td width="55%" valign="top">
+      <b>🏭 IoT Monitoring & Control for a Wet Scrubber</b><br/><br/>
+      End-to-end bidirectional IoT system designed to supervise a wet scrubber. Two symmetric ESP32 nodes (C on ESP-IDF/FreeRTOS) read temperature and humidity from AHT10 sensors and drive a fan, buzzer and visual alarm when thresholds are crossed, with a direct ESP-NOW link for emergency stop that works without Internet. Telemetry flows over MQTT/TLS to a Python worker that persists it in PostgreSQL, and a Django dashboard shows live status and history and pushes retained configuration back to each node, with end-to-end acknowledgments.<br/>
+      <b>Tech:</b> ESP32 · ESP-IDF · C · MQTT/TLS · ESP-NOW · Python · Django · PostgreSQL · Docker<br/>
+      <a href="https://github.com/AbimaelFranco/iot-engineering-challenge">→ View repository</a>
+    </td>
+  </tr>
   <tr>
     <td width="45%" valign="top">
       <a href="https://github.com/AbimaelFranco/Robotic-Arm-3D-Printable">
